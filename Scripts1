@@ -1,0 +1,137 @@
+done ( walang foreign key to)
+create table department(
+dept_id integer not null,
+dept_name varchar(45) not null,
+faculty_id integer,
+foreign key(faculty_id) references faculty(faculty_id),
+constraint dept_pk primary key (dept_id));
+
+done
+create table faculty(
+faculty_id integer not null,
+faculty_fname varchar(45) not null,
+faculty_lname varchar(45) not null,
+faculty_mi varchar(45),
+faculty_email varchar(45) not null,
+faculty_contact varchar(20) not null,
+faculty_position varchar (45) not null,
+dept_id integer,
+foreign key(dept_id) references department(dept_id),
+constraint faculty_uk unique (faculty_fname, faculty_lname),
+constraint faculty_pk primary key(faculty_id));
+
+done
+create table parts(
+parts_id integer not null,
+parts_name varchar(45) not null,
+parts_quantity integer not null,
+parts_cost decimal(9,2) not null,
+constraint parts_pk primary key(parts_id))
+
+done
+create table vehicletype(
+vtype_id integer not null,
+vtype_name varchar(45) not null,
+vtype_capacity integer not null,
+mileage_rate decimal(9,2) not null,
+constraint vtype_pk primary key(vtype_id))
+
+done
+create table vehicle(
+vehicle_id integer not null,
+vehicle_type varchar(45) not null,
+vehicle_platenumber varchar(45) not null,
+vehicle_availability varchar(45) not null,
+vtype_id integer,
+foreign key(vtype_id) references vehicletype(vtype_id),
+constraint vehicle_pk primary key (vehicle_id));
+
+done
+create table employee(
+emp_id integer not null,
+emp_name varchar(45),
+emp_type varchar(45),
+constraint emp_pk primary key (emp_id));
+
+done
+create table mechanic(
+emp_id integer,
+mech_authorization varchar(45),
+foreign key(emp_id) references employee(emp_id))
+
+done
+create table log(
+log_id integer not null,
+log_description varchar(45),
+entry_date varchar(45) not null,
+end_date varchar(45) not null,
+vehicle_id integer,
+emp_id integer,
+foreign key(vehicle_id) references vehicle(vehicle_id),
+foreign key(emp_id) references employee(emp_id),
+constraint log_pk primary key(log_id)) 
+
+done
+create table signout(
+sign_out_id integer not null,
+sign_out_date varchar(45) not null,
+sign_out_quantity integer not null,
+mech_id integer not null,
+log_id integer,
+parts_id integer,
+emp_id integer,
+foreign key(log_id) references log(log_id),
+foreign key(parts_id) references parts(parts_id),
+foreign key(emp_id) references employee(emp_id),
+constraint sign_out_pk primary key(sign_out_id))
+
+done
+create table logdetail(
+logdetail_id integer not null,
+maitenance_performed varchar(100),
+maitenance_parts varchar(45),
+log_id integer,
+parts_id integer,
+emp_id integer,
+foreign key(log_id) references log(log_id),
+foreign key(parts_id) references parts(parts_id),
+foreign key(emp_id) references employee(emp_id),
+constraint logdetail_pk primary key(logdetail_id))
+
+done
+create table reservation(
+reservation_id integer not null,
+departure varchar(45) not null,
+destination varchar(45) not null,
+faculty_id integer,
+vtype_id integer,
+foreign key(faculty_id) references faculty(faculty_id),
+foreign key (vtype_id) references vehicletype(vtype_id),
+constraint reservation_pk primary key(reservation_id))
+
+done
+create table completionform(
+reservation_id integer,
+checkkout_date varchar(45) not null,
+return_date varchar(45),
+odometer_start integer not null,
+odometer_end integer,
+complaints varchar(45),
+galoons_fuel double,
+miles_covered double not null,
+credit_card varchar(45) not null,
+emp_id integer,
+faculty_id integer,
+vehicle_id integer,
+foreign key(reservation_id) references reservation(reservation_id),
+foreign key(emp_id) references employee(emp_id),
+foreign key(faculty_id) references faculty(faculty_id),
+foreign key(vehicle_id) references vehicle(vehicle_id))
+
+done
+create table expense(
+expense_id integer not null,
+total_cost decimal(9,2),
+reservation_id integer,
+foreign key(reservation_id) references reservation(reservation_id),
+constraint expense_pk primary key (expense_id))
